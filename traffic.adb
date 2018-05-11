@@ -1,4 +1,5 @@
 with Ada.Characters.Latin_1;
+with Ada.Numerics.Float_Random;
 with Ada.Text_IO;
 
 
@@ -18,9 +19,15 @@ procedure Traffic is
     end Crossroads;
 
     protected Multi_Printer is
+        entry Init;
+        entry Get_Time_To_Cross (Time   :    out Duration;
+                                 Offset : in     Duration);
         procedure Print_Lamp_Color (Color : Lamp_Color);
         procedure Print_Vehicle_Status (Plate   : in Number_Plate;
                                         Message : in String);
+    private
+        G : Ada.Numerics.Float_Random.Generator;
+        Initialized : Boolean := False;
     end Multi_Printer;
 
     protected Lamp is
@@ -89,6 +96,20 @@ procedure Traffic is
     end Lamp;
 
     protected body Multi_Printer is
+        entry Init
+            when not Initialized is
+        begin
+            Ada.Numerics.Float_Random.Reset (G);
+            Initialized := True;
+        end Init;
+
+        entry Get_Time_To_Cross (Time   :    out Duration;
+                                 Offset : in     Duration)
+            when Initialized is
+        begin
+            Time := Offset + Duration (Ada.Numerics.Float_Random.Random (G));
+        end Get_Time_To_Cross;
+        
         procedure Print_Lamp_Color (Color : in Lamp_Color) is
         begin
             Ada.Text_IO.Put_Line ("A lampa: " & Lamp_Color'Image (Color));
@@ -112,6 +133,8 @@ procedure Traffic is
 
     V : access Vehicle;
 begin
+    Multi_Printer.Init;
+
     for I in Vehicle_IDs'Range loop
         V := new Vehicle (new String'(Vehicle_IDs'Image (I)));
         delay 0.5;
