@@ -2,11 +2,13 @@ with Ada.Text_IO;
 
 
 procedure Traffic is
+    type Vehicle_IDs is range 0 .. 9;
+
     type Lamp_Color is
         (Red,
          Red_Yellow,
          Green,
-         Yellow);    
+         Yellow);
 
     protected Lamp is
         function Color return Lamp_Color;
@@ -72,6 +74,12 @@ procedure Traffic is
         end Switch;
     end Lamp;
 
+    V : access Vehicle;
 begin
-   null;
+    for I in Vehicle_IDs'Range loop
+        V := new Vehicle (new String'(Vehicle_IDs'Image (I)));
+        delay 0.5;
+    end loop;
+    delay 10.0;
+    Controller.Stop;
 end Traffic;
