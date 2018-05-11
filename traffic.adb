@@ -65,24 +65,28 @@ procedure Traffic is
         end if;
     end Vehicle;
 
+    -- a szimulacionak valoszinuleg egybol veget kellene ernie, ha `controller.stop`-ot
+    -- meghivjak (jobb oldali, kommentkent szereplo kod), nem csak akkor a kovetkezo
+    -- lampa szinenek megvaltozasakor (bal oldali kod), de itt hagyom mindkettot,
+    -- mert a feladat szovege alapjan egyik mukodes sem hibas
     task body Controller is
         Curr_Color : Lamp_Color;
-    begin
-        loop
-            select
-                accept Stop;
-                exit;
-            else
-                Curr_Color := Lamp.Color;
-                case Curr_Color is
-                    when Red | Green => delay 3.0;
-                    when Red_Yellow   => delay 1.0;
-                    when Yellow      => delay 2.0;
-                end case;
-                Lamp.Switch;
-            end select;
-        end loop;
-    end Controller;
+    begin                                           -- begin
+        loop                                        --     loop
+            select                                  --         Curr_Color := Lamp.Color;
+                accept Stop;                        --         case Curr_Color is
+                exit;                               --             when Red | Green  => Curr_Wait_Time := 3.0;
+            else                                    --             when Red_Yellow   => Curr_Wait_Time := 1.0;
+                Curr_Color := Lamp.Color;           --             when Yellow       => Curr_Wait_Time := 2.0;
+                case Curr_Color is                  --         end case;
+                    when Red | Green  => delay 3.0; --         select
+                    when Red_Yellow   => delay 1.0; --             accept Stop;
+                    when Yellow       => delay 2.0; --             exit;
+                end case;                           --         or
+                Lamp.Switch;                        --             delay Curr_Wait_Time;
+            end select;                             --         end select;
+        end loop;                                   --     end loop;
+    end Controller;                                 -- end Controller;
 
     task body Signal is
     begin
