@@ -158,5 +158,7 @@ begin
         delay 0.5;
     end loop;
     delay 10.0;
-    Controller.Stop;
+    if not Controller'Terminated then
+        Controller.Stop;
+    end if;
 end Traffic;
