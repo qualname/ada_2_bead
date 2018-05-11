@@ -16,6 +16,7 @@ procedure Traffic is
 
     protected Crossroads is
         entry Cross (Time : Duration);
+        procedure Wake_Up;
     end Crossroads;
 
     protected Multi_Printer is
@@ -36,6 +37,9 @@ procedure Traffic is
     private
         Curr_Color : Lamp_Color := Red;
     end Lamp;
+
+    task type Signal;
+    type Signal_Access is access Signal;
 
     task Controller is
         entry Stop;
@@ -80,6 +84,11 @@ procedure Traffic is
         end loop;
     end Controller;
 
+    task body Signal is
+    begin
+        Crossroads.Wake_Up;
+    end Signal;
+
     protected body Lamp is
         function Color return Lamp_Color is
         begin
@@ -87,6 +96,7 @@ procedure Traffic is
         end Color;
 
         procedure Switch is
+            S : Signal_Access;
         begin
             if Curr_Color = Lamp_Color'Last then
                 Curr_Color := Lamp_Color'First;
@@ -94,6 +104,7 @@ procedure Traffic is
                 Curr_Color := Lamp_Color'Succ (Curr_Color);
             end if;
             Multi_Printer.Print_Lamp_Color (Curr_Color);
+            S := new Signal;
         end Switch;
     end Lamp;
 
@@ -131,6 +142,11 @@ procedure Traffic is
         begin
             delay Time;
         end Cross;
+
+        procedure Wake_Up is
+        begin
+            null;
+        end Wake_Up;
     end Crossroads;
 
     V : access Vehicle;
