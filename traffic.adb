@@ -59,7 +59,7 @@ procedure Traffic is
             Crossroads.Cross (Cross_Duration);
         end select;
         Multi_Printer.Print_Vehicle_Status (Plate, "atert a keresztezodesen " &
-                                            Duration'Image (Cross_Time) & " sec alatt.");
+                                            Duration'Image (Cross_Duration) & " sec alatt.");
         if Vehicle_IDs'Value (Plate.all) = Vehicle_IDs'Last then
             Controller.Stop;
         end if;
