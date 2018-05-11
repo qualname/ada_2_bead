@@ -40,6 +40,6 @@ Amikor a jármű a kereszteződéshez ér, hívja meg a `Crossroads`nak a `Cross
 
 Ahhoz, hogy a szimuláció teljes legyen, a lámpának értesítenie kell a kereszteződést arról, hogy átkapcsolták. Legyen a kereszteződésnek egy `Wake_Up` művelete, amit meghívva rá tudjuk venni a `Crossroads`-ot, hogy újra ellenőrizze a `Cross` művelethez tartozó őrfeltételt. Ezt a `Wake_Up` műveletet közvetlenül nem hívhatja meg a lámpa, egy közbeékelt ágensre van szükség. Hozzunk létre egy ilyen ágens taszkot a lámpában, amikor átváltják. Az ágens taszk meghívja a `Wake_Up` műveletet, majd befejeződik.
 
-Folyamatábrás segítség itt
+Folyamatábrás segítség [itt](crossroad.png)
 
 Jó munkát, Oktatók és Demonstrátorok
