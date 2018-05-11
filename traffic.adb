@@ -43,6 +43,9 @@ procedure Traffic is
                 delay 0.2;
             end if;
         end loop;
+        if Vehicle_IDs'Value (Plate.all) = Vehicle_IDs'Last then
+            Controller.Stop;
+        end if;
     end Vehicle;
 
     task body Controller is
