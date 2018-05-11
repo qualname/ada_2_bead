@@ -44,16 +44,18 @@ procedure Traffic is
     task type Vehicle (Plate : Number_Plate);
 
     task body Vehicle is
+        Cross_Duration : Duration;
     begin
         Multi_Printer.Print_Vehicle_Status (Plate, "keresztezodeshez ert");
-        loop
-            if Lamp.Color = Green then
-                Multi_Printer.Print_Vehicle_Status (Plate, "atert a keresztezodesen");
-                exit;
-            else
-                delay 0.2;
-            end if;
-        end loop;
+        Multi_Printer.Get_Time_To_Cross (Cross_Duration, 0.5);
+        select
+            Crossroads.Cross (Cross_Duration);
+        else
+            Multi_Printer.Get_Time_To_Cross (Cross_Duration, 2.5);
+            Crossroads.Cross (Cross_Duration);
+        end select;
+        Multi_Printer.Print_Vehicle_Status (Plate, "atert a keresztezodesen " &
+                                            Duration'Image (Cross_Time) & " sec alatt.");
         if Vehicle_IDs'Value (Plate.all) = Vehicle_IDs'Last then
             Controller.Stop;
         end if;
