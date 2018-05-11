@@ -13,6 +13,10 @@ procedure Traffic is
          Green,
          Yellow);
 
+    protected Crossroads is
+        entry Cross (Time : Duration);
+    end Crossroads;
+
     protected Multi_Printer is
         procedure Print_Lamp_Color (Color : Lamp_Color);
         procedure Print_Vehicle_Status (Plate   : in Number_Plate;
@@ -97,6 +101,14 @@ procedure Traffic is
                                   Message);
         end Print_Vehicle_Status;
     end Multi_Printer;
+
+    protected body Crossroads is
+        entry Cross (Time : Duration)
+            when Lamp.Color = Green is
+        begin
+            delay Time;
+        end Cross;
+    end Crossroads;
 
     V : access Vehicle;
 begin
